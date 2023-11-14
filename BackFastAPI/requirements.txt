@@ -1,0 +1,12 @@
+
+
+fastapi
+uvicorn
+azure-data-tables
+azure-core
+pandas
+httpx
+python-dotenv
+
+## put the code in the terminal to install all the items:
+# pip install -r requirements.txt

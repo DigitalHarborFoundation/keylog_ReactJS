@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  keylog:
+    build: .
+    container_name: myapp_c
+    command: sh -c "uvicorn keylogging:app --reload --port=5173 --host=0.0.0.0"
+    ports:
+      - 5173:5173
+    volumes:
+      - .:/app
