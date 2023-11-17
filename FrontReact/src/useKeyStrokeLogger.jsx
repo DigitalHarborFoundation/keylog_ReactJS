@@ -8,8 +8,8 @@ import { ActivityDetector } from "./ActivityDetector";
 export function useKeyStrokeLogger({
   textAreaRef,
   submitButtonRef,
-  sessionId,
   userId,
+  sessionId,
   quizId,
   endpoint = "https://keystroke.eedi.com/v1/keystrokes",
   // Other parameters for the key stroke logger...
@@ -341,7 +341,7 @@ export function useKeyStrokeLogger({
         c_submitButtonRef.removeEventListener("click", handleSubmit);
       }
     };
-  }, [textAreaRef, submitButtonRef, sessionId, userId, quizId, endpoint]);
+  }, [textAreaRef, submitButtonRef, userId, sessionId, quizId, endpoint]);
 
   //return { handleSubmit };
 }
