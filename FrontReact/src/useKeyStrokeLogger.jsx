@@ -11,7 +11,7 @@ export function useKeyStrokeLogger({
   userId,
   sessionId,
   quizId,
-  endpoint = "https://keystroke.eedi.com/v1/keystrokes",
+  endpoint = "https://XXXX",
   // Other parameters for the key stroke logger...
 }) {
   useEffect(() => {

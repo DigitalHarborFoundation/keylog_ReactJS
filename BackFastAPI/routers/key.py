@@ -11,13 +11,12 @@ assert dotenv.load_dotenv(".env")
 
 router = APIRouter()
 
-# create a environment variable. To change the value of this variable, run this command in bash terminal:
-# 'Eedi_API=VALUE' before the command 'uvicorn keylogging:app'
-eedi_api_host = os.getenv("Eedi_API", "")
+# Get the environment variables. Make sure you set the variables in the .env file according to the instructions in README.md 
+my_api_host = os.getenv("MY_API", "")
 conn_str = os.getenv("CONN_STR", "")
 table_name = os.getenv("TABLE_NAME", "")
 
-URL_root = f'https://{eedi_api_host}/v3/tokens/access?refreshToken='
+URL_root = f'https://{my_api_host}/v3/tokens/access?refreshToken='
 
 
 async def validate_token(token: str):
@@ -30,7 +29,7 @@ async def validate_token(token: str):
             return False
 
 
-# Handle Post requests: get the data and insert it to database
+# Handle Post requests: get the data and insert it to database. This example uses Azure Table Storage
 @router.post('/')
 async def create_key(data: KeyBase, authorization: str = Header(None)):
 

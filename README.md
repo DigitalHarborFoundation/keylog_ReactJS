@@ -1,6 +1,6 @@
 ## Keystroke_Logging_OpenSource
 
-a keystroke logging mechanism to collect keystroke data for research and development purposes
+This is a keystroke logging mechanism to collect keystroke data for research and development purposes.
 
 The keystroke logging mechanism unobtrusively collects information about users' keystroke and mouse operations from the front end using a keystroke logging hook written in React JavaScript. The information is aggregated and posted to the back end whenever the user submit the responses in the chatbot. At the back end, the keystroke information is handled via a FastAPI app that connects to a cloud-based Azure table storage. Finally, all the keystroke information is stored in the Azure table storage in tabular format.
 

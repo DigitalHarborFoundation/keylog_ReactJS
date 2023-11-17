@@ -12,7 +12,7 @@ const SampleInput = () => {
     userId: 12345,
     quizId: 1106,
     endpoint: "http://localhost:8000", //local host of the fastAPI
-    token: "asd235423423$_sdf2345sdf", // key chain  third-party authentication  attach to the call to endpoint()
+    token: "my_token", // key chain  third-party authentication  attach to the call to endpoint()
   });
 
   return (
