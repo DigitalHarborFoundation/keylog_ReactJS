@@ -15,7 +15,6 @@ export function useKeyStrokeLogger({
   // Other parameters for the key stroke logger...
 }) {
   useEffect(() => {
-    console.log(textAreaRef);
     const c_textAreaRef = textAreaRef.current;
     const c_submitButtonRef = submitButtonRef.current;
 
@@ -66,6 +65,8 @@ export function useKeyStrokeLogger({
       /// when logging space, it is better to use the letter space for the output column
       if (e.key === " ") {
         keylog.Output.push("Space");
+      } else if (e.key === "unidentified") {
+        keylog.Output.push("ScreenTouch");
       } else {
         keylog.Output.push(e.key);
       }
@@ -284,7 +285,7 @@ export function useKeyStrokeLogger({
       });
       c_textAreaRef.addEventListener("mousedown", handleMouseClick);
       // for touch screen devices, event listener needs to be added to the whole document.
-      document.addEventListener("touchstart", function (e) {
+      window.addEventListener("touchstart", function (e) {
         if (
           e.key === "Enter" &&
           !e.ctrlKey &&
