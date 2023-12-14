@@ -11,6 +11,7 @@ class KeyStrokeLogger extends Component {
   quizId = "YYY";
   endpoint = "https://XXXX";
 
+  TextareaTouch = false;
   taskonset = 0; // set the value as the time when the target question is loaded.
   EventID = 0;
   startSelect = [];
@@ -58,8 +59,6 @@ class KeyStrokeLogger extends Component {
   };
 
   handleKeyDown = (e) => {
-    console.log("keydown event fired!");
-    console.log(e.key);
     let d_press = new Date();
     this.keylog.EventTime.push(d_press.getTime() - this.taskonset); // start time
 
@@ -72,6 +71,8 @@ class KeyStrokeLogger extends Component {
     /// when logging space, it is better to use the letter space for the output column
     if (e.key === " ") {
       this.keylog.Output.push("Space");
+    } else if (e.key === "unidentified") {
+      this.keylog.Output.push("VirtualKeyboardTouch");
     } else {
       this.keylog.Output.push(e.key);
     }
@@ -90,6 +91,10 @@ class KeyStrokeLogger extends Component {
     // console.log(textNow);
   };
 
+  handleTouch = () => {
+    this.TextareaTouch = true;
+  };
+
   handleMouseClick = (e) => {
     let mouseDown_m = new Date();
     let MouseDownTime = mouseDown_m.getTime() - this.taskonset;
@@ -103,13 +108,29 @@ class KeyStrokeLogger extends Component {
     //////Start logging for this current click down event
     this.keylog.EventTime.push(MouseDownTime); // starttime
     if (e.button === 0) {
-      this.keylog.Output.push("Leftclick");
+      if (this.TextareaTouch) {
+        this.keylog.Output.push("TextareaTouch");
+      } else {
+        this.keylog.Output.push("Leftclick");
+      }
     } else if (e.button === 1) {
-      this.keylog.Output.push("Middleclick");
+      if (this.TextareaTouch) {
+        this.keylog.Output.push("TextareaTouch");
+      } else {
+        this.keylog.Output.push("Middleclick");
+      }
     } else if (e.button === 2) {
-      this.keylog.Output.push("Rightclick");
+      if (this.TextareaTouch) {
+        this.keylog.Output.push("TextareaTouch");
+      } else {
+        this.keylog.Output.push("Rightclick");
+      }
     } else {
-      this.keylog.Output.push("Unknownclick");
+      if (this.TextareaTouch) {
+        this.keylog.Output.push("TextareaTouch");
+      } else {
+        this.keylog.Output.push("Unknownclick");
+      }
     }
 
     this.logCurrentText(e);
@@ -123,37 +144,8 @@ class KeyStrokeLogger extends Component {
       this.ActivityCancel,
       this.TextChangeCancel
     );
-  };
-  handleTouch = (e) => {
-    let d_press = new Date();
-    this.keylog.EventTime.push(d_press.getTime() - this.taskonset); // start time
-
-    this.EventID = this.EventID + 1;
-    this.keylog.EventID.push(this.EventID);
-
-    // Add a unique RowKey
-    this.keylog.RowKey.push(this.sessionQuiz + "-" + String(this.EventID));
-
-    if (e.key === " ") {
-      this.keylog.Output.push("Space");
-    } else if (e.key === "Unidentified") {
-      this.keylog.Output.push("UnknownTouch");
-    } else {
-      this.keylog.Output.push(e.key);
-    }
-
-    this.keylog.TextContent.push(String(this.textAreaRef.current.value));
-    // log cursor position
-    this.handleCursor(this.keylog, this.startSelect, this.endSelect);
-
-    /////// use a customized function to detect and record different activities and the according text changes these activities bring about
-    ActivityDetector(
-      this.keylog,
-      this.startSelect,
-      this.endSelect,
-      this.ActivityCancel,
-      this.TextChangeCancel
-    );
+    // set TextareaTouch back as false
+    this.TextareaTouch = false;
   };
 
   handleSubmit = () => {
@@ -292,24 +284,12 @@ class KeyStrokeLogger extends Component {
           this.handleKeyDown(e);
         }
       });
+
+      this.textAreaRef.current.addEventListener("touchstart", this.handleTouch);
       this.textAreaRef.current.addEventListener(
         "mousedown",
         this.handleMouseClick
       );
-      // for touch screen devices, event listener needs to be added to the whole document.
-      document.addEventListener("touchstart", (e) => {
-        if (
-          e.key === "Enter" &&
-          !e.ctrlKey &&
-          !e.shiftKey &&
-          !e.altKey &&
-          !e.metaKey
-        ) {
-          this.handleSubmit();
-        } else {
-          this.handleTouch(e);
-        }
-      });
     }
 
     if (isButton) {
@@ -339,24 +319,15 @@ class KeyStrokeLogger extends Component {
           this.handleKeyDown(e);
         }
       });
+
+      this.textAreaRef.current.removeEventListener(
+        "touchstart",
+        this.handleTouch
+      );
       this.textAreaRef.current.removeEventListener(
         "mousedown",
         this.handleMouseClick
       );
-      // for touch screen devices, event listener needs to be added to the whole document.
-      document.removeEventListener("touchstart", (e) => {
-        if (
-          e.key === "Enter" &&
-          !e.ctrlKey &&
-          !e.shiftKey &&
-          !e.altKey &&
-          !e.metaKey
-        ) {
-          this.handleSubmit();
-        } else {
-          this.handleTouch(e);
-        }
-      });
     }
 
     if (isButton) {
