@@ -150,23 +150,7 @@ class KeyStrokeLogger extends Component {
 
   handleSubmit = () => {
     // e.preventDefault(); // to prevent a browser refresh or reload
-    if (this.EventID === 0) {
-      this.keylog = {
-        PartitionKey: [0],
-        RowKey: [0],
-        TaskOnSet: [0],
-        TaskEnd: [0],
-        EventID: [0],
-        EventTime: [0],
-        Output: ["NA"],
-        CursorPosition: [0],
-        TextContent: [0],
-        TextChange: ["NoChange"],
-        Activity: ["Nonproduction"],
-        FinalProduct: ["The author wrote nothing."],
-      };
-      //post the data to the serve
-    } else {
+    if (this.EventID != 0) {
       this.keylog.TaskOnSet.push(this.taskonset); //record task onset time
 
       ///// adjust the keylog data
